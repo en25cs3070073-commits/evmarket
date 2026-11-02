@@ -185,11 +185,54 @@ def app_checks(fact):
     check("unconfigured page omits iframe", "<iframe" not in unconfigured)
 
 
+def unanchored_patterns(path):
+    """Ignore patterns that match at any depth, which is what bites static/."""
+    if not os.path.exists(path):
+        return []
+    out = []
+    for line in open(path, encoding="utf-8"):
+        s = line.strip()
+        if not s or s.startswith("#") or s.startswith("!"):
+            continue
+        if s.startswith("/"):
+            continue
+        s = s.rstrip("/")
+        if "/" not in s and not s.startswith("*"):
+            out.append(s)
+    return out
+
+
+def ignore_checks():
+    print("\n[deploy ignore rules]")
+    static_files = []
+    for dirpath, _dirs, names in os.walk(os.path.join(ROOT, "static")):
+        for n in names:
+            rel = os.path.relpath(os.path.join(dirpath, n), ROOT).replace("\\", "/")
+            static_files.append(rel)
+
+    check("static assets exist to deploy", len(static_files) >= 3, str(static_files))
+
+    for fname in (".vercelignore", ".gitignore"):
+        pats = unanchored_patterns(os.path.join(ROOT, fname))
+        hits = []
+        for sf in static_files:
+            parts = set(sf.split("/")[:-1])
+            hits += [f"{fname} pattern '{p}/' also matches {sf}"
+                     for p in pats if p in parts]
+        check(f"{fname} does not exclude static/", not hits, "; ".join(hits[:2]))
+
+    vi = unanchored_patterns(os.path.join(ROOT, ".vercelignore"))
+    gi = unanchored_patterns(os.path.join(ROOT, ".gitignore"))
+    check("tableau_urls.json is deployable", "tableau_urls.json" not in vi + gi)
+    check("app.py is deployable", "app.py" not in vi + gi)
+
+
 def main():
     rows = load_csv()
     csv_checks(rows)
     db_checks(rows)
     app_checks(int(psql("SELECT COUNT(*) FROM ev_variant_sales")))
+    ignore_checks()
     print(f"\n{CHECKS - len(FAILURES)}/{CHECKS} checks passed")
     if FAILURES:
         print("failed: " + ", ".join(FAILURES))

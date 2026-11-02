@@ -1,8 +1,10 @@
 # Deployment ships the site only. The warehouse, ETL and generated data stay local.
-data/
-db/
-scripts/
-docker-compose.yml
+# Leading slashes are required: an unanchored "data/" also matches static/data/,
+# which is the JSON the site renders from and must be deployed.
+/data/
+/db/
+/scripts/
+/docker-compose.yml
 __pycache__/
 *.pyc
-visualization/
+/visualization/
