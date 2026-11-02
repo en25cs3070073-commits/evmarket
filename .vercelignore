@@ -1,0 +1,8 @@
+# Deployment ships the site only. The warehouse, ETL and generated data stay local.
+data/
+db/
+scripts/
+docker-compose.yml
+__pycache__/
+*.pyc
+visualization/

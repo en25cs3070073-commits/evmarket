@@ -1,0 +1,222 @@
+     query      | models | brands | manufacturing_countries | battery_technologies | lifetime_units | gwh_demand | mean_rating 
+----------------+--------+--------+-------------------------+----------------------+----------------+------------+-------------
+ Q1 market KPIs |    119 |     52 |                      11 |                    5 |       24054926 |     1591.2 |       4.190
+(1 row)
+
+     brand     |   units    | models | avg_price_usd | avg_range_miles | avg_rating | pct_of_dataset_units | rank 
+---------------+------------+--------+---------------+-----------------+------------+----------------------+------
+ Tesla         | 4450964.00 |      7 |         40709 |           275.6 |       4.32 |                18.50 |    1
+ BYD           | 3935816.00 |      9 |         25860 |           278.4 |       4.16 |                16.36 |    2
+ Volkswagen    | 1359931.00 |      6 |         38047 |           284.7 |       4.25 |                 5.65 |    3
+ Wuling        | 1210732.00 |      2 |          5600 |           127.0 |       3.60 |                 5.03 |    4
+ Hyundai       | 1139186.00 |      4 |         37800 |           309.7 |       4.38 |                 4.74 |    5
+ Kia           | 1083516.00 |      5 |         37229 |           292.3 |       4.30 |                 4.50 |    6
+ Aion          | 1072787.00 |      2 |         17590 |           268.5 |       4.13 |                 4.46 |    7
+ MG            |  624509.00 |      3 |         21911 |           262.8 |       4.26 |                 2.60 |    8
+ Mercedes-Benz |  574343.00 |      5 |         62744 |           297.4 |       4.12 |                 2.39 |    9
+ Ford          |  533845.00 |      3 |         43953 |           292.4 |       4.20 |                 2.22 |   10
+(10 rows)
+
+ model_year | leader | leader_pct | top5_pct | active_brands 
+------------+--------+------------+----------+---------------
+       2018 | Tesla  |      31.06 |    84.30 |             9
+       2019 | Tesla  |      26.76 |    70.33 |            14
+       2020 | Tesla  |      30.47 |    66.14 |            21
+       2021 | Tesla  |      26.45 |    67.45 |            35
+       2022 | Tesla  |      24.68 |    58.05 |            44
+       2023 | Tesla  |      24.49 |    54.67 |            48
+       2024 | BYD    |      18.57 |    50.85 |            51
+       2025 | BYD    |      20.14 |    46.57 |            51
+(8 rows)
+
+  body_type  | lifetime_units | pct_of_dataset | share_2021_pct | share_2025_pct | share_change_pts | models_2021 | models_2025 
+-------------+----------------+----------------+----------------+----------------+------------------+-------------+-------------
+ SUV         |       12299920 |          51.13 |          32.48 |          55.39 |            22.91 |          19 |          55
+ Hatchback   |        5373903 |          22.34 |          38.84 |          19.80 |           -19.04 |          16 |          16
+ Sedan       |        5142960 |          21.38 |          23.93 |          19.17 |            -4.76 |          13 |          24
+ Two-Wheeler |         430752 |           1.79 |           0.77 |           2.65 |             1.88 |           1 |           3
+ Van         |         423430 |           1.76 |           2.66 |           1.37 |            -1.30 |           3 |           4
+ Truck       |         250702 |           1.04 |                |           1.32 |                  |             |           4
+ Bus         |         133259 |           0.55 |           1.33 |           0.31 |            -1.01 |           4 |           5
+(7 rows)
+
+ battery_technology |  units   | pct_units | gwh_demand | pct_gwh | avg_range_miles | avg_mfg_co2e_tonnes 
+--------------------+----------+-----------+------------+---------+-----------------+---------------------
+ NMC                | 12262238 |     50.98 |      896.9 |   56.37 |           283.8 |               11.97
+ LFP                | 11476466 |     47.71 |      661.2 |   41.55 |           240.0 |               11.55
+ NCA                |   261829 |      1.09 |       29.8 |    1.87 |           370.6 |               15.22
+ Sodium-Ion         |    41216 |      0.17 |        1.3 |    0.08 |            97.8 |               20.52
+ Semi-Solid-State   |    13177 |      0.05 |        2.0 |    0.13 |           395.4 |               21.34
+(5 rows)
+
+ model_year | lfp_units | nmc_units |  leader   
+------------+-----------+-----------+-----------
+       2018 |     15910 |     38399 | NMC ahead
+       2019 |     71038 |    146606 | NMC ahead
+       2020 |    165220 |    249337 | NMC ahead
+       2021 |    764409 |    719332 | LFP ahead
+       2022 |   1354881 |   1499854 | NMC ahead
+       2023 |   2399725 |   2753106 | NMC ahead
+       2024 |   3112300 |   3409704 | NMC ahead
+       2025 |   3592983 |   3445900 | LFP ahead
+(8 rows)
+
+  body_type  | variant_rows | avg_capacity_kwh | avg_range_miles | avg_wh_per_mi | corr_capacity_range 
+-------------+--------------+------------------+-----------------+---------------+---------------------
+ Two-Wheeler |           12 |              3.8 |           174.7 |          22.0 |               0.582
+ Hatchback   |          272 |             48.4 |           237.0 |         201.5 |               0.945
+ Sedan       |          281 |             84.8 |           341.8 |         247.4 |               0.856
+ SUV         |          603 |             71.1 |           266.4 |         263.4 |               0.846
+ Van         |           24 |             75.2 |           241.8 |         313.6 |               0.894
+ Truck       |           41 |            246.2 |           297.6 |         933.4 |              -0.555
+ Bus         |           30 |            339.9 |           160.5 |        2075.4 |               0.951
+(7 rows)
+
+ battery_technology | avg_peak_kw | min_peak_kw | max_peak_kw | avg_charge_min_10_80 | avg_c_rate 
+--------------------+-------------+-------------+-------------+----------------------+------------
+ NCA                |       252.3 |       250.0 |       255.0 |                 22.1 |       2.28
+ NMC                |       145.4 |         1.2 |       306.0 |                 30.9 |       1.91
+ LFP                |       103.4 |         1.0 |       285.6 |                 40.9 |       1.70
+ Semi-Solid-State   |       202.5 |       200.0 |       210.0 |                 37.3 |       1.33
+ Sodium-Ion         |        60.0 |        30.0 |        90.0 |                 90.8 |       0.77
+(5 rows)
+
+ battery_technology | from_yr | to_yr | range_low | range_high | years_observed | range_gain_pct 
+--------------------+---------+-------+-----------+------------+----------------+----------------
+ LFP                |    2018 |  2025 |     190.8 |      257.3 |              8 |           34.9
+ NMC                |    2018 |  2025 |     228.6 |      307.9 |              8 |           34.7
+ NCA                |    2018 |  2025 |     346.5 |      395.0 |              8 |           14.0
+ Sodium-Ion         |    2024 |  2025 |      96.0 |       99.5 |              2 |            3.6
+ Semi-Solid-State   |    2024 |  2025 |     388.8 |      402.0 |              2 |            3.4
+(5 rows)
+
+       query       | hhi_index |  market_structure   | largest_country_pct | countries 
+-------------------+-----------+---------------------+---------------------+-----------
+ Q10 concentration |      2842 | highly concentrated |               48.63 |        11
+(1 row)
+
+ country_of_origin | grid_intensity_kgco2_per_kwh | passenger_units | t_saved_per_vehicle_year | avg_range_miles | avg_mfg_co2e_tonnes 
+-------------------+------------------------------+-----------------+--------------------------+-----------------+---------------------
+ Sweden            |                        0.050 |          653857 |                     2.54 |           284.7 |                9.99
+ France            |                        0.060 |         1178016 |                     2.30 |           229.3 |                7.56
+ Czechia           |                        0.410 |          276819 |                     1.87 |           288.3 |               12.19
+ Spain             |                        0.190 |          186051 |                     1.82 |           265.0 |                7.81
+ USA               |                        0.370 |         2986942 |                     1.75 |           335.3 |               12.64
+ India             |                        0.630 |          383004 |                     1.75 |           221.0 |                9.38
+ Germany           |                        0.360 |         2702370 |                     1.71 |           290.8 |               11.03
+ South Korea       |                        0.460 |         2326958 |                     1.65 |           293.9 |               11.78
+ Japan             |                        0.470 |          611275 |                     1.50 |           224.3 |                9.42
+ China             |                        0.550 |        11402800 |                     1.35 |           272.0 |               11.07
+ Vietnam           |                        0.680 |          108691 |                     1.23 |           247.2 |               12.66
+(11 rows)
+
+ battery_technology | country_of_origin | avg_t_saved_per_year | mfg_payback_years | rows 
+--------------------+-------------------+----------------------+-------------------+------
+ LFP                | France            |                 2.07 |               2.7 |   14
+ NMC                | France            |                 2.35 |               3.4 |   65
+ LFP                | Sweden            |                 2.69 |               3.5 |   18
+ NMC                | Sweden            |                 8.35 |               3.7 |   44
+ NMC                | Spain             |                 1.82 |               4.3 |   24
+ LFP                | India             |                 3.06 |               5.1 |   58
+ NMC                | India             |                 1.21 |               5.2 |   20
+ LFP                | USA               |                 1.93 |               5.5 |   18
+ NMC                | USA               |                10.14 |               5.6 |  145
+ NMC                | Germany           |                 1.99 |               6.2 |  204
+ NMC                | Japan             |                 1.50 |               6.3 |   83
+ NMC                | Czechia           |                 1.87 |               6.5 |   15
+(12 rows)
+
+     brand     |  body_type  | avg_rating | units  
+---------------+-------------+------------+--------
+ Hyundai       | Sedan       |       4.61 | 233608
+ IM Motors     | Sedan       |       4.59 |  65469
+ Zeekr         | Sedan       |       4.56 | 229286
+ Chevrolet     | SUV         |       4.54 | 149841
+ NIO           | Sedan       |       4.50 | 138357
+ Rivian        | Truck       |       4.49 |  50259
+ XPeng         | SUV         |       4.49 | 217002
+ BYD           | Sedan       |       4.46 | 828250
+ Honda         | SUV         |       4.45 |  66393
+ Volkswagen    | Sedan       |       4.44 |  62192
+ Porsche       | Sedan       |       4.42 | 126307
+ Genesis       | SUV         |       4.41 |  61733
+ Mercedes-Benz | Sedan       |       4.41 | 177829
+ Hongqi        | SUV         |       4.41 |  53389
+ Tesla         | Truck       |       4.40 |  71687
+ BMW           | Sedan       |       4.39 | 213213
+ Smart         | SUV         |       4.37 | 115777
+ Nissan        | SUV         |       4.37 | 105297
+ Polestar      | Sedan       |       4.34 | 189751
+ Toyota        | Sedan       |       4.33 | 140821
+ Kia           | SUV         |       4.33 | 907661
+ Aion          | SUV         |       4.32 | 620318
+ Skoda         | SUV         |       4.32 | 276819
+ Seat          | Hatchback   |       4.31 |  53544
+ Deepal        | Sedan       |       4.29 | 241136
+ MG            | Hatchback   |       4.29 | 542940
+ Ford          | SUV         |       4.29 | 324178
+ Cupra         | Hatchback   |       4.28 | 132507
+ Audi          | SUV         |       4.28 | 247944
+ Renault       | SUV         |       4.28 | 176165
+ Ora           | Hatchback   |       4.27 | 206660
+ Volvo         | SUV         |       4.21 | 444868
+ Tata          | SUV         |       4.16 | 210089
+ Peugeot       | Hatchback   |       4.03 | 287265
+ Opel          | Hatchback   |       4.03 | 182402
+ Wuling        | SUV         |       3.98 | 143989
+ Citroen       | Hatchback   |       3.96 |  62307
+ VinFast       | SUV         |       3.93 | 108691
+ Li Auto       | SUV         |       3.88 | 316267
+ Dacia         | Hatchback   |       3.80 | 275352
+ Mazda         | SUV         |       3.75 |  63245
+ TVS           | Two-Wheeler |       3.71 | 138360
+ Ola           | Two-Wheeler |       3.64 |  97515
+ Ather         | Two-Wheeler |       3.54 | 194877
+ Yutong        | Bus         |       3.51 |  50677
+(45 rows)
+
+ brand  |    model_name     | body_type | battery_technology | avg_range_miles | avg_price_usd | usd_per_mile | avg_rating | lifetime_units 
+--------+-------------------+-----------+--------------------+-----------------+---------------+--------------+------------+----------------
+ Wuling | Bingo             | SUV       | LFP                |             218 |          9633 |         44.8 |       3.98 |         143989
+ MG     | Wuling Binguo     | Hatchback | LFP                |             203 |          9200 |         45.8 |       3.97 |         174714
+ Wuling | Hongguang Mini EV | Hatchback | LFP                |             110 |          4990 |         45.9 |       3.37 |        1066743
+ BYD    | Seagull           | Hatchback | LFP                |             193 |         10100 |         53.1 |       3.95 |         718899
+ BYD    | Dolphin           | Hatchback | LFP                |             285 |         15150 |         53.8 |       4.29 |         405415
+ BYD    | Yuan Pro          | Hatchback | LFP                |             214 |         12710 |         60.2 |       3.97 |         189388
+ Tata   | Nexon EV          | SUV       | LFP                |             230 |         13956 |         61.5 |       4.16 |         150991
+ Aion   | S                 | Sedan     | LFP                |             257 |         16707 |         66.1 |       3.98 |         452469
+ Aion   | Y                 | SUV       | LFP                |             256 |         18160 |         71.9 |       4.32 |         620318
+ Ora    | Good Cat          | Hatchback | LFP                |             292 |         20870 |         72.4 |       4.27 |         206660
+ BYD    | Song Plus         | SUV       | LFP                |             279 |         22447 |         81.1 |       4.27 |         935461
+ BYD    | Seal              | Sedan     | LFP                |             338 |         27667 |         82.3 |       4.48 |         344756
+(12 rows)
+
+ model_year | solid_state_units | sodium_units | emerging_pct_of_units | solid_range_passenger | lithium_ion_range_passenger 
+------------+-------------------+--------------+-----------------------+-----------------------+-----------------------------
+       2018 |                 0 |            0 |                 0.000 |                       |                       305.1
+       2019 |                 0 |            0 |                 0.000 |                       |                       281.4
+       2020 |                 0 |            0 |                 0.000 |                       |                       276.5
+       2021 |                 0 |            0 |                 0.000 |                       |                       281.0
+       2022 |                 0 |            0 |                 0.000 |                       |                       281.0
+       2023 |                 0 |            0 |                 0.000 |                       |                       284.5
+       2024 |              2480 |         7469 |                 0.151 |                 388.8 |                       292.5
+       2025 |             10697 |        33747 |                 0.622 |                 402.0 |                       302.0
+(8 rows)
+
+ market_segment |  price_band   |  units  | avg_range_miles | avg_rating | co2e_avoided 
+----------------+---------------+---------+-----------------+------------+--------------
+ Budget         | A. under 20k  | 4414904 |           202.7 |       3.92 |      6549558
+ Budget         | B. 20k to 40k |  890463 |           231.7 |       3.90 |      1431392
+ Commercial     | B. 20k to 40k |  185206 |           278.8 |       3.92 |      1158460
+ Commercial     | C. 40k to 70k |  132711 |           206.3 |       3.73 |       909888
+ Commercial     | D. over 70k   |  137259 |           183.2 |       3.59 |      1720966
+ Luxury         | C. 40k to 70k |  256702 |           367.5 |       4.42 |       341695
+ Luxury         | D. over 70k   |  978097 |           383.6 |       4.39 |      4043485
+ Mainstream     | A. under 20k  | 1013798 |           219.7 |       4.10 |      1252438
+ Mainstream     | B. 20k to 40k | 9169349 |           260.1 |       4.23 |     15360573
+ Mainstream     | C. 40k to 70k | 2812481 |           283.5 |       4.25 |      4956000
+ Premium        | B. 20k to 40k | 1115936 |           308.4 |       4.39 |      1635696
+ Premium        | C. 40k to 70k | 2900772 |           285.1 |       4.29 |     12928501
+ Premium        | D. over 70k   |   47248 |           326.5 |       4.45 |      2345147
+(13 rows)
+

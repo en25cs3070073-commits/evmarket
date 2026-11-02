@@ -1,0 +1,66 @@
+{
+  "project_name": "EV Analytics Hub",
+  "tagline": "Market, battery and manufacturing intelligence for the electric vehicle transition",
+  "source_note": "Modelled dataset covering 119 vehicle lines across 2018-2025. Sales, pricing and rating values are generated, not observed. See data/METADATA.md.",
+  "pages": [
+    {
+      "key": "market",
+      "kind": "dashboard",
+      "nav": "Market Overview",
+      "title": "EV Market & Sales Intelligence",
+      "summary": "Total sales, leading manufacturers, category contribution and yearly growth.",
+      "personas": ["Emily Johnson - Market Strategy Director", "David Chen - Business Intelligence Manager"],
+      "questions": [
+        "Which vehicle categories contribute most to annual sales?",
+        "Who leads the market, and is that leadership stable?",
+        "Where is customer satisfaction strongest?",
+        "Which segments are still growing?"
+      ],
+      "url": "",
+      "height": 820
+    },
+    {
+      "key": "battery",
+      "kind": "dashboard",
+      "nav": "Battery Intelligence",
+      "title": "Battery & Vehicle Performance",
+      "summary": "Chemistry adoption, capacity, driving range and charging behaviour.",
+      "personas": ["Emily Johnson - Market Strategy Director", "Dr. Sarah Williams - Sustainable Mobility Research Analyst"],
+      "questions": [
+        "Which battery technologies dominate, by vehicles and by energy demand?",
+        "Does battery capacity actually predict driving range?",
+        "How fast can each chemistry refill, and how has range improved?",
+        "What is the emissions cost of making the pack?"
+      ],
+      "url": "",
+      "height": 820
+    },
+    {
+      "key": "global",
+      "kind": "dashboard",
+      "nav": "Global EV Insights",
+      "title": "Global Manufacturing & Sustainability",
+      "summary": "Manufacturing geography, concentration and the grid-dependency of EV emissions benefit.",
+      "personas": ["David Chen - Business Intelligence Manager", "Dr. Sarah Williams - Sustainable Mobility Research Analyst"],
+      "questions": [
+        "How concentrated is EV manufacturing?",
+        "Where does an identical EV avoid the most CO2?",
+        "How long until manufacturing emissions are repaid?",
+        "Which models deliver the most range per dollar?"
+      ],
+      "url": "",
+      "height": 820
+    },
+    {
+      "key": "story",
+      "kind": "story",
+      "nav": "EV Insights Story",
+      "title": "EV Insights Story",
+      "summary": "A four-scene analytical narrative: market overview, leading manufacturers, battery technology, and future opportunities.",
+      "personas": ["Presented to all three audiences"],
+      "questions": [],
+      "url": "",
+      "height": 900
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Not found | {{ config.project_name }}{% endblock %}
+{% block main %}
+<section class="viz-shell">
+  <div class="viz-state placeholder">
+    <h2>404 &mdash; no such page</h2>
+    <p>Available pages:
+      <a href="{{ url_for('home') }}">Home</a>
+      {% for p in config.pages %}
+        &middot; <a href="{{ url_for('page', key=p.key) }}">{{ p.nav }}</a>
+      {% endfor %}
+    </p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="hero">
+  <p class="eyebrow">Electric Vehicle Business Intelligence</p>
+  <h1>{{ config.tagline }}</h1>
+  <p class="lede">
+    Three dashboards and one analytical story, built on a Postgres warehouse and embedded
+    here through Tableau. Every figure traces back to a documented SQL query.
+  </p>
+</section>
+
+{% set live = config.pages | selectattr("url") | list | length %}
+{% if live < config.pages | length %}
+<div class="notice">
+  <strong>{{ live }} of {{ config.pages | length }} views published.</strong>
+  Publish the Tableau workbook, then paste each view URL into
+  <code>tableau_urls.json</code> and redeploy. Pages without a URL show their analytical
+  brief instead of an empty frame.
+</div>
+{% endif %}
+
+<section class="grid grid-3">
+  {% for p in config.pages if p.kind == "dashboard" %}
+  <a class="card" href="{{ url_for('page', key=p.key) }}">
+    <span class="card-tag">{{ p.kind }}</span>
+    <h2>{{ p.title }}</h2>
+    <p>{{ p.summary }}</p>
+    <span class="card-link">Open dashboard &rarr;</span>
+  </a>
+  {% endfor %}
+</section>
+
+<section class="band">
+  <h2>Who this platform is for</h2>
+  <div class="grid grid-3">
+    <article class="persona">
+      <h3>Emily Johnson</h3>
+      <p class="role">EV Market Strategy Director</p>
+      <p>Needs category contribution, manufacturer leadership and customer satisfaction to
+        prioritise the product portfolio.</p>
+    </article>
+    <article class="persona">
+      <h3>David Chen</h3>
+      <p class="role">Automotive Business Intelligence Manager</p>
+      <p>Needs share, production geography and competitive positioning to advise clients
+        entering the EV market.</p>
+    </article>
+    <article class="persona">
+      <h3>Dr. Sarah Williams</h3>
+      <p class="role">Sustainable Mobility Research Analyst</p>
+      <p>Needs chemistry comparison, range improvement and emissions evidence to support
+        clean-mobility policy.</p>
+    </article>
+  </div>
+</section>
+
+<section class="band">
+  <h2>How the system works</h2>
+  <ol class="flow">
+    <li><span>Modelled EV dataset</span><code>data/ev_market_dataset.csv</code></li>
+    <li><span>Postgres in Docker, with a staged ETL and a star schema</span><code>db/schema.sql</code></li>
+    <li><span>Sixteen analysis queries and ten views</span><code>db/analysis_queries.sql</code></li>
+    <li><span>Tableau extracts the SQL layer and publishes three dashboards plus a story</span></li>
+    <li><span>Flask embeds the published views and is deployed to Vercel</span></li>
+  </ol>
+</section>
+{% endblock %}

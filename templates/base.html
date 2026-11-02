@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ config.project_name }}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+  <header class="site-head">
+    <div class="wrap head-row">
+      <a class="brand" href="{{ url_for('home') }}">
+        <span class="brand-mark">EV</span>
+        <span class="brand-text">{{ config.project_name }}</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="{{ url_for('home') }}">Home</a>
+        {% for p in config.pages %}
+          <a href="{{ url_for('page', key=p.key) }}"
+             {% if request.path == '/' ~ p.key %}class="active"{% endif %}>{{ p.nav }}</a>
+        {% endfor %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">{% block main %}{% endblock %}</main>
+
+  <footer class="site-foot">
+    <div class="wrap">
+      <p class="foot-note">{{ config.source_note }}</p>
+      <p class="foot-meta">Postgres &rarr; SQL &rarr; Tableau &rarr; Flask on Vercel</p>
+    </div>
+  </footer>
+</body>
+</html>
