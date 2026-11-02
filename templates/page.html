@@ -19,8 +19,25 @@
 </section>
 {% endif %}
 
+<section class="viz-shell">
+  <div class="shell-head">
+    <h2>Interactive views</h2>
+    <p id="rowcount" class="muted">Loading dataset&hellip;</p>
+  </div>
+  <div id="filters" class="filters"></div>
+  <div id="loading" class="viz-state">
+    <div class="skeleton" aria-hidden="true"></div>
+    <p>Reading <code>static/data/facts.json</code>, serialised from the <code>v_ev_data</code> SQL view&hellip;</p>
+  </div>
+  <div id="charts" class="chart-grid" data-page="{{ page.key }}"></div>
+</section>
+
 {% if page.url %}
 <section class="viz-shell">
+  <div class="shell-head">
+    <h2>Tableau version</h2>
+    <p class="muted">The published workbook, embedded from Tableau Public.</p>
+  </div>
   <div class="viz-frame">
     <div id="viz-loading" class="viz-state">
       <div class="skeleton" aria-hidden="true"></div>
@@ -35,28 +52,19 @@
   <div id="viz-failed" class="viz-state viz-error" hidden>
     <h2>This view is still loading</h2>
     <p>The embedded dashboard has not reported back after 20 seconds. The published view may be
-      unavailable, or the workbook name in <code>tableau_urls.json</code> may not match what is
-      on Tableau Public.</p>
+      unavailable, or the workbook name in <code>tableau_urls.json</code> may not match what is on
+      Tableau Public. The interactive views above are unaffected.</p>
     <a class="btn" href="{{ page.url }}" rel="noopener" target="_blank">Open in Tableau Public</a>
   </div>
 
   <p class="viz-credit">
-    Interactive: use the filters inside the view to change manufacturer, year, vehicle category,
-    battery technology and country.
     <a href="{{ page.url }}" rel="noopener" target="_blank">Open full size &rarr;</a>
   </p>
 
   <script src="{{ url_for('static', filename='js/embed.js') }}" defer></script>
 </section>
-{% else %}
-<section class="viz-shell">
-  <div class="viz-state placeholder">
-    <h2>Not published yet</h2>
-    <p>No Tableau URL is configured for this page. Publish the
-      <strong>{{ page.title }}</strong> sheet to Tableau Public, then set its
-      <code>url</code> in <code>tableau_urls.json</code>.</p>
-    <p class="hint">Until then the analytical brief above defines what this dashboard will show.</p>
-  </div>
-</section>
 {% endif %}
+
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
+<script src="{{ url_for('static', filename='js/charts.js') }}" defer></script>
 {% endblock %}

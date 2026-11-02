@@ -117,7 +117,7 @@ def db_checks(rows):
     check("GWh units are correct", abs(gwh - expect) < 2, f"{gwh} vs {expect}")
 
 
-def app_checks():
+def app_checks(fact):
     print("\n[web]")
     cfg = json.load(open(os.path.join(ROOT, "tableau_urls.json"), encoding="utf-8"))
     keys = [p["key"] for p in cfg["pages"]]
@@ -162,22 +162,34 @@ def app_checks():
     check("unknown route is 404", s404 == 404)
     check("404 page is friendly", "no such page" in body404)
 
-    for path, needle in (("/static/css/main.css", ":root"), ("/static/js/embed.js", "viz-iframe")):
+    for path, needle in (("/static/css/main.css", ":root"), ("/static/js/embed.js", "viz-iframe"),
+                         ("/static/js/charts.js", "PAGES"), ("/static/data/facts.json", '"cols"')):
         s, _ = get(path)
         check(f"{path} served", s == 200)
 
-    # An unconfigured page must show guidance, never a broken frame.
+    # The static JSON must carry exactly the rows the warehouse holds.
+    _, payload = get("/static/data/facts.json")
+    site = json.loads(payload)
+    check("site data row count matches warehouse", len(site["rows"]) == fact,
+          f"{len(site['rows'])} vs {fact}")
+    check("site data has no null cells",
+          not any(v is None for row in site["rows"] for v in row))
+
+    # Every page must render the interactive shell, published or not.
+    for key in keys:
+        s, body = get("/" + key)
+        check(f"/{key} renders chart shell", 'id="charts"' in body and f'data-page="{key}"' in body)
+
     _, unconfigured = get("/" + next(k for k in keys
                                     if not next(p for p in cfg["pages"] if p["key"] == k)["url"]))
-    check("unconfigured page shows placeholder", "Not published yet" in unconfigured)
-    check("unconfigured page has no iframe", "<iframe" not in unconfigured)
+    check("unconfigured page omits iframe", "<iframe" not in unconfigured)
 
 
 def main():
     rows = load_csv()
     csv_checks(rows)
     db_checks(rows)
-    app_checks()
+    app_checks(int(psql("SELECT COUNT(*) FROM ev_variant_sales")))
     print(f"\n{CHECKS - len(FAILURES)}/{CHECKS} checks passed")
     if FAILURES:
         print("failed: " + ", ".join(FAILURES))

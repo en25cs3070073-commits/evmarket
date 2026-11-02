@@ -1,0 +1,165 @@
+EV ANALYTICS HUB - TABLEAU CALCULATED FIELDS (paste-ready)
+==========================================================
+
+How to add each one:
+  Analysis menu -> Create Calculated Field
+  Type the NAME on the first line of this file into the Name box
+  Paste the FORMULA block into the editor
+  Click the checkmark (Validate), then OK
+
+Create them in this order. Fields 10-14 reference earlier ones, so those
+must exist first.
+
+All names are case-sensitive and must match exactly - the worksheets in
+docs/TABLEAU_BUILD_SPEC.md refer to them by these names.
+
+Note on fields 3 and 6: they return a fraction (0.51 = 51%). After creating
+them, right-click the field -> Display Format -> Percentage, 1 decimal.
+
+Field 6 is a table calculation. After creating it, right-click it on the
+shelf -> Compute Using -> model_year.
+
+
+======================================================================
+1. Sales Weighted Range
+======================================================================
+
+SUM([driving_range_miles] * [annual_sales_units]) / SUM([annual_sales_units])
+
+
+======================================================================
+2. Sales Weighted Price
+======================================================================
+
+SUM([price_usd] * [annual_sales_units]) / SUM([annual_sales_units])
+
+
+======================================================================
+3. Share of Dataset Sales %
+======================================================================
+
+SUM([annual_sales_units]) / TOTAL(SUM([annual_sales_units]))
+
+
+======================================================================
+4. Battery Demand GWh
+======================================================================
+
+SUM([gwh_battery_demand])
+
+
+======================================================================
+5. CO2e Avoided (kt)
+======================================================================
+
+SUM([co2e_avoided_tonnes]) / 1000
+
+
+======================================================================
+6. YoY Growth %
+======================================================================
+
+(SUM([annual_sales_units]) - LOOKUP(SUM([annual_sales_units]), -1))
+  / LOOKUP(SUM([annual_sales_units]), -1)
+
+
+======================================================================
+7. Models Count
+======================================================================
+
+COUNTD([model_id])
+
+
+======================================================================
+8. Brands Count
+======================================================================
+
+COUNTD([brand])
+
+
+======================================================================
+9. Avg Charging Rate C
+======================================================================
+
+SUM([peak_charging_kw] * [annual_sales_units])
+  / SUM([annual_sales_units] * [battery_capacity_kwh])
+
+
+======================================================================
+10. Price Band
+======================================================================
+
+IF [Sales Weighted Price] < 20000 THEN "A. under $20k"
+ELSEIF [Sales Weighted Price] < 40000 THEN "B. $20k to $40k"
+ELSEIF [Sales Weighted Price] < 70000 THEN "C. $40k to $70k"
+ELSE "D. over $70k"
+END
+
+
+======================================================================
+11. Range Band
+======================================================================
+
+IF [Sales Weighted Range] < 200 THEN "1. under 200 mi"
+ELSEIF [Sales Weighted Range] < 300 THEN "2. 200 to 300 mi"
+ELSE "3. over 300 mi"
+END
+
+
+======================================================================
+12. Grid Band
+======================================================================
+
+IF MIN([grid_intensity_kgco2_per_kwh]) < 0.10 THEN "1. Clean grid"
+ELSEIF MIN([grid_intensity_kgco2_per_kwh]) < 0.35 THEN "2. Mixed grid"
+ELSE "3. Coal-heavy grid"
+END
+
+
+======================================================================
+13. Technology Class
+======================================================================
+
+IF [battery_technology] IN ("Semi-Solid-State", "Sodium-Ion") THEN "Emerging"
+ELSE "Established"
+END
+
+
+======================================================================
+14. Satisfaction Tier
+======================================================================
+
+IF AVG([customer_rating]) >= 4.40 THEN "Excellent"
+ELSEIF AVG([customer_rating]) >= 4.10 THEN "Good"
+ELSE "Below average"
+END
+
+
+======================================================================
+15. Brand Share Within Category %
+======================================================================
+
+{FIXED [brand], [body_type]: SUM([annual_sales_units])}
+  / {FIXED [body_type]: SUM([annual_sales_units])}
+
+
+======================================================================
+TROUBLESHOOTING
+======================================================================
+
+"Invalid date constant" or a field not found
+  -> The data source is not v_ev_data / ev_data.csv, or the column was
+     renamed. Column names are lowercase with underscores exactly as in
+     the CSV header.
+
+Field 15 says a FIXED calculation is not supported
+  -> You are connected to a Live source on Tableau Public. Switch the
+     data source to Extract (Data -> <source> -> Extract).
+
+Percentage fields render as 0.51 instead of 51%
+  -> Right-click the field -> Display Format -> Percentage.
+
+Grid Band or Satisfaction Tier errors when dragged to Colour
+  -> Both contain aggregates (MIN / AVG). That is expected; they only
+     work on a sheet where the level of view matches, e.g. country or
+     brand. Move them onto Colour rather than Rows/Columns.

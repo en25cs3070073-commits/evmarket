@@ -133,20 +133,33 @@ dashboards.
 ## Epic 7 — Flask integration and testing
 
 `app.py` reads `tableau_urls.json` as its only configuration and serves `/`, `/market`, `/battery`,
-`/global`, `/story`. Embedding uses an iframe with `:embed=true`, and `static/js/embed.js` reveals
-the frame on `load`, shows a skeleton before that, and offers a Tableau Public fallback after 20
-seconds.
+`/global`, `/story`. Each page renders two things: a set of **built-in interactive charts** built by
+`static/js/charts.js` from `static/data/facts.json`, and, once a URL is configured, the published
+Tableau view in an iframe with `:embed=true`. `static/js/embed.js` reveals that frame on `load`,
+shows a skeleton before it, and offers a Tableau Public fallback after 20 seconds.
 
-Two design points worth defending:
+`scripts/build_site_data.py` serialises `v_ev_data` into a columnar JSON (16 columns x 1,263 rows,
+130 KB raw, 28 KB gzipped). Columnar rather than an array of objects, because repeating 20 key
+names per row costs more than the values do.
 
-- **Flask never touches the database.** The published Tableau extract is the snapshot, so the
-  deployed app has no connection string, no driver and no secret. This is what makes a free static
-  function host viable.
-- **A page without a URL is a documented state, not a bug.** It renders the analytical brief, so
-  the site is presentable at every stage of the build.
+Three design points worth defending:
 
-`scripts/validate.py` runs 42 checks across the dataset, warehouse and routes and exits non-zero on
-failure. `scripts/perf_test.py` regenerates the performance report from live measurements.
+- **Flask never touches the database.** The published Tableau extract and the static JSON are both
+  snapshots, so the deployed app has no connection string, no driver and no secret. This is what
+  makes a free static function host viable.
+- **The site works before Tableau exists.** The built-in charts are computed from the same SQL view
+  the workbook uses, so nothing is blocked while the workbook is authored. They are labelled
+  "Interactive views" and the Tableau block is labelled "Tableau version", so the two are never
+  confused for each other.
+- **Captions are derived, not typed.** The four story captions compute their own numbers from the
+  data, using the same definitions as Q15 and Q5, so they cannot silently drift from the SQL layer.
+  Two early versions did drift: scene 3 divided by a filtered denominator and scene 4 quoted a
+  lifetime share where the docs quoted a single-year one. Both now reproduce the SQL figures exactly
+  (402.0 vs 302.0 miles, 0.622% emerging share).
+
+`scripts/validate.py` runs 49 checks across the dataset, warehouse and routes and exits non-zero on
+failure, including that the shipped JSON row count equals the fact table.
+`scripts/perf_test.py` regenerates the performance report from live measurements.
 
 ## Epic 8 — Demonstration and documentation
 
@@ -170,8 +183,25 @@ by the validation suite now.
 | Solid-state range advantage hidden | A sodium-ion bus sat in the same average | Q15 compares passenger vehicles only: 402 vs 302 miles |
 | Tableau embed stayed on "Loading" forever | `viz_v1.js` and `tableau-2.min.js` expose no `TableauEventType` and its `Viz` has no `addEventListener` | Replaced the JS-API approach with an iframe plus a load-timeout fallback |
 | `load.sql` failed on a second run | `DROP TABLE stg_ev_raw` could not cascade to the view depending on it | Added `CASCADE`; reload is now idempotent |
+| Shell scripts failed from PowerShell | Git Bash resolved `docker` to a Linux client looking for `unix:///var/run/docker.sock`, and MSYS path translation broke the compose arguments | Added `load_db.ps1` and `export_tableau.ps1`; they export via the container filesystem so PowerShell's UTF-16 `>` redirection cannot corrupt the CSV bytes |
+| Every filter dropdown showed only "All" | `buildFilterBar` ran during `init()`, before the JSON fetch resolved, so it built option lists from an empty array | Moved filter construction into the fetch success handler; verified live: selecting Tesla narrows 1,263 rows to 119 and 4.45M units, Reset restores |
+| Story captions disagreed with the SQL docs | Scene 3 divided by a chemistry-filtered denominator; scene 4 used a lifetime share and sales-weighted means where Q15 uses a single-year share and model means | Aligned both to the documented definitions; browser now renders 402.0 / 302.0 / 0.622%, matching Q15 exactly |
+| Shipped JSON was 380 KB instead of the 130 KB reported | `round(x, 0)` returns a float, so every integer wrote a `.0`, and five columns no chart read were still shipped | Cast zero-digit values to int and dropped unused columns; 130 KB raw, 28 KB gzipped |
 
 ## Reproducing from scratch
+
+Windows (PowerShell):
+
+```powershell
+python scripts\generate_dataset.py
+.\scripts\load_db.ps1
+.\scripts\export_tableau.ps1
+python scripts\validate.py
+python scripts\perf_test.py
+python app.py
+```
+
+macOS / Linux:
 
 ```bash
 python scripts/generate_dataset.py
@@ -181,3 +211,5 @@ python scripts/validate.py
 python scripts/perf_test.py
 python app.py
 ```
+
+The Python scripts run identically in both shells; only the shell wrappers differ.

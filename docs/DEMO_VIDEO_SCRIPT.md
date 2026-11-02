@@ -7,11 +7,16 @@ your browser.
 ## Before you press record
 
 - Docker Desktop running, `docker ps` shows `ev-postgres` healthy
-- `python scripts/validate.py` prints `42/42 checks passed` — do this live if it is quick
+- `python scripts\validate.py` prints `49/49 checks passed` — do this live if it is quick
+- `python scripts\build_site_data.py` has been run, so `static/data/facts.json` matches the database
 - Tableau workbook published and all four URLs filled into `tableau_urls.json`
 - Site deployed and reachable, plus the URL open in a tab
 - Zoom to 150% in the terminal; close notifications
-- If the Tableau embed is flaky, keep the workbook open in Tableau Public as a fallback to show
+
+**If the workbook is not published yet, you can still record.** The interactive views on every
+page are computed from the same SQL view and work without Tableau. Cut the dashboard and story
+sections to those charts, drop the "Tableau version" narration, and say plainly that the Tableau
+layer is pending — do not present the built-in charts as if they were Tableau.
 
 ## 0:00 - 0:35 — Title
 
@@ -59,8 +64,8 @@ Open `data/METADATA.md` in the editor.
 
 Terminal.
 
-```bash
-bash scripts/load_db.sh
+```powershell
+.\scripts\load_db.ps1
 ```
 
 > Three tables. `country`, `vehicle_model`, and the fact table `ev_variant_sales`. The grain is

@@ -18,13 +18,14 @@ exists and is unambiguous but the artefact is built by hand in Tableau.
 | Dashboards | 3, at 1600x900 fixed with a Phone device layout each | `docs/TABLEAU_BUILD_SPEC.md` §4 | Specified |
 | Responsive design | Device layouts in Tableau; fluid CSS, breakpoint at 640px, horizontally scrollable nav in Flask | `static/css/main.css` | Flask done |
 | Story scenes | 4, each with a pre-written caption and its figures | `docs/TABLEAU_BUILD_SPEC.md` §5 | Specified |
-| Data filters | 6 per dashboard: brand, model_year, body_type, battery_technology, country_of_origin, market_segment | `docs/TABLEAU_BUILD_SPEC.md` §4 | Specified |
+| Data filters | 6 per dashboard: brand, model_year, body_type, battery_technology, country_of_origin, market_segment | `docs/TABLEAU_BUILD_SPEC.md` §4, and live in `static/js/charts.js` | Site done, Tableau specified |
 | Web pages | 5 routes: `/`, `/market`, `/battery`, `/global`, `/story` | `app.py` | Done |
-| Embedded Tableau | 4 embeds (3 dashboards + story) with loading skeleton, 20 s timeout and fallback link | `templates/page.html`, `static/js/embed.js` | Done |
-| Error / loading states | Placeholder when unpublished, skeleton while loading, fallback when slow, styled 404 | verified by `scripts/validate.py` | Done |
+| Built-in visualisations | 20 chart components across the 4 pages (KPI strip, line, bar, treemap, heatmap, donut, box, stacked bar, colour-coded bar, horizontal bar, data table, 4 story scenes) with 6 working cross-filters | `static/js/charts.js`, verified in-browser | Done |
+| Embedded Tableau | 4 embeds (3 dashboards + story) with loading skeleton, 20 s timeout and fallback link | `templates/page.html`, `static/js/embed.js` | Config done, needs workbook |
+| Error / loading states | Skeleton while data loads, fallback when the embed is slow, styled 404, graceful "no rows match filters" | verified by `scripts/validate.py` | Done |
 | Performance testing | Server-side query latency, ETL timing and page latency, all regenerated from live measurement | `docs/PERFORMANCE_TESTING.md` | Done |
 | Data rendered to DB | 1,263 fact rows, 24,054,926 modelled vehicle-years of sales, zero ETL rejections | load report in `db/load.sql` | Done |
-| Validation | 42 automated checks, all passing | `scripts/validate.py` | Done |
+| Validation | 49 automated checks, all passing, including that the shipped JSON row count equals the fact table | `scripts/validate.py` | Done |
 | Documentation | 6 documents covering problem, procedure, data, metrics, performance, build spec | `docs/`, `data/METADATA.md`, `README.md` | Done |
 | Demo video | Shot-by-shot script with timings written; recording needs the published workbook | `docs/DEMO_VIDEO_SCRIPT.md` | Script done |
 | Deployment | `vercel.json`, `requirements.txt`, `.vercelignore` prepared | repo root | Config done, needs account |
@@ -39,7 +40,7 @@ exists and is unambiguous but the artefact is built by hand in Tableau.
 | 4 Data preparation | Complete | — |
 | 5 Tableau visualisations | Specified | Build W1-W15 in Tableau Public Desktop |
 | 6 Dashboard and story | Specified | Assemble 3 dashboards, phone layouts, story, publish |
-| 7 Flask integration and testing | Complete except live embed | Paste the 4 published URLs, re-run `validate.py` |
+| 7 Flask integration and testing | Complete | Site renders interactive charts now; the Tableau embed section appears automatically once a URL is configured |
 | 8 Demonstration and documentation | Docs complete | Record the video, deploy to Vercel |
 
 Two epics cannot be finished by automation: **Epic 5-6 are manual GUI work inside Tableau**, and

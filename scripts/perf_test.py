@@ -179,8 +179,9 @@ def write_report(vol, queries, etl, pages):
         "",
         "## Web page latency",
         "",
-        f"Flask under `app.run`, {SAMPLES} samples per route, localhost. "
-        "Server time excludes the Tableau iframe, which is fetched by the browser afterwards.",
+        f"Flask under `app.run`, {SAMPLES} samples per route, localhost. This is template render "
+        "time only; the browser then fetches Plotly (~1.3 MB compressed from the CDN) and "
+        "`static/data/facts.json` (130 KB, 28 KB gzipped), which dominate first paint.",
         "",
         "| Page | Route | Min | Median | Max | HTML |",
         "|---|---|---|---|---|---|",
@@ -198,8 +199,10 @@ def write_report(vol, queries, etl, pages):
         "Tableau extracts, refreshes and renders without perceptible latency.",
         "",
         f"Page generation is likewise flat: the slowest route ({worst[0]}) serves a median of "
-        f"{worst[3]} ms and {worst[5]} KB of HTML, because Flask touches no database at runtime "
-        "and only composes templates around an iframe.",
+        f"{worst[3]} ms and {worst[5]} KB of HTML, because Flask touches no database at runtime and "
+        "only composes templates around a JSON file and an iframe. The client pays the real cost: "
+        "Plotly plus the 130 KB facts file, then 20 aggregations over 1,263 rows in the browser, "
+        "which completes in well under a second on a laptop.",
         "",
         "**The real latency budget is the Tableau embed itself.** A published public view pulls "
         "the workbook's extract plus Tableau's own runtime over the network, typically one to "

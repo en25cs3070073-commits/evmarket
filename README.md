@@ -30,16 +30,48 @@ docker-compose.yml    Postgres 16 on localhost:5432
 
 ## Quickstart
 
-```bash
+**Windows — run these from a PowerShell prompt.**
+
+```powershell
 pip install -r requirements.txt
-bash scripts/load_db.sh          # starts Postgres, builds schema, runs the ETL
-bash scripts/export_tableau.sh   # writes data/tableau/*.csv for Tableau
-python scripts/validate.py       # 42 checks over data, warehouse and site
-python app.py                    # http://127.0.0.1:5000
+.\scripts\load_db.ps1             # starts Postgres, builds schema, runs the ETL
+python scripts\build_site_data.py # serialises v_ev_data to static/data/facts.json
+.\scripts\export_tableau.ps1      # writes data\tableau\*.csv for Tableau
+python scripts\validate.py        # 49 checks over data, warehouse and site
+python app.py                     # http://localhost:5000
 ```
 
-The site runs before anything is published. Pages without a Tableau URL show their analytical
-brief instead of a broken frame, so you can develop and demo the shell at any stage.
+**macOS / Linux:**
+
+```bash
+pip install -r requirements.txt
+bash scripts/load_db.sh
+python scripts/build_site_data.py
+bash scripts/export_tableau.sh
+python scripts/validate.py
+python app.py
+```
+
+## Two layers of visualisation
+
+Each dashboard page renders **built-in interactive charts** computed in the browser from
+`static/data/facts.json`, which is serialised straight from the `v_ev_data` SQL view. Six filters
+(brand, year, category, chemistry, country, segment) re-aggregate every chart on the page. This
+layer works with no Tableau and no database connection, so the site is presentable at any time.
+
+When you publish the workbook and paste its URL into `tableau_urls.json`, a second section titled
+**Tableau version** appears beneath the charts. That Tableau layer is what satisfies the brief's
+"Connect DB with Tableau" requirement; the built-in charts are the delivery shell's own view of
+the same numbers. Re-run `build_site_data.py` whenever the database changes so the two never drift.
+
+Do not run the `.sh` scripts from PowerShell via `bash` on Windows. Git Bash resolves `docker` to
+a Linux client that looks for `unix:///var/run/docker.sock`, which Docker Desktop does not expose,
+and its path translation mangles the compose arguments. The `.ps1` scripts do the same work with
+Windows-native paths and are byte-checked: they write CSVs inside the container and copy them out,
+because PowerShell's `>` redirection would re-encode stdout as UTF-16.
+
+The site is fully functional before anything is published: every page renders interactive charts
+from the SQL-derived JSON, and the Tableau embed section appears only once a URL is configured.
 
 ## Tableau step
 

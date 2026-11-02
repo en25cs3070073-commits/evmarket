@@ -35,6 +35,9 @@ the **Geographic role → Country** to `country_of_origin`.
 ## 2. Calculated fields
 
 Create all of these on the `v_ev_data` source. Field names are shown exactly as they appear.
+For paste-ready syntax without the table formatting, open
+[tableau_calculations.txt](tableau_calculations.txt) — it lists the same 15 fields in dependency
+order with a troubleshooting section.
 
 | Name | Definition | Used by |
 |---|---|---|
